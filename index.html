@@ -1,0 +1,748 @@
+<!doctype html>
+<!-- ============================================================
+     GRIDMIND EMS — index.html
+     Main HTML structure for microgrid control dashboard
+     ============================================================ -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GRIDMIND EMS ⚡ Microgrid Energy Management System</title>
+  <meta name="description" content="Cloud-based Microgrid Energy Management System Dashboard" />
+  <meta property="og:image" content="https://bolt.new/static/og_default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://bolt.new/static/og_default.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/sld.css">
+  <link rel="stylesheet" href="/css/charts.css">
+  <link rel="stylesheet" href="/css/animations.css">
+  <link rel="stylesheet" href="/css/tabs.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <svg style="display:none">
+    <defs>
+      <filter id="glow-filter">
+        <feGaussianBlur stdDeviation="4" result="blur"/>
+        <feMerge>
+          <feMergeNode in="blur"/>
+          <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+      </filter>
+    </defs>
+  </svg>
+
+  <div class="topbar glass">
+    <div class="topbar-left">
+      <svg class="logo-icon" width="32" height="32" viewBox="0 0 32 32">
+        <path d="M16 2 L20 14 L28 14 L22 20 L25 30 L16 24 L7 30 L10 20 L4 14 L12 14 Z"
+              fill="var(--accent-gold)" filter="url(#glow-filter)"/>
+      </svg>
+      <div class="brand-text">
+        <h1 class="brand-title">GRIDMIND EMS</h1>
+        <p class="brand-sub">v4.0 — Cloud Edition</p>
+      </div>
+    </div>
+
+    <div class="topbar-center-left">
+      <div class="mode-toggle glass">
+        <button id="btn-manual" class="mode-btn" data-mode="MANUAL">
+          <span class="mode-icon">🖐️</span>
+          <span class="mode-label">MANUAL</span>
+        </button>
+        <button id="btn-smart" class="mode-btn active" data-mode="SMART">
+          <span class="mode-icon">🤖</span>
+          <span class="mode-label">SMART</span>
+        </button>
+        <div class="mode-indicator"></div>
+      </div>
+      <div id="mode-status-label" class="mode-status">Smart Optimizer Active</div>
+    </div>
+
+    <div class="topbar-center">
+      <div class="system-header">⚡ MICROGRID CONTROL SYSTEM</div>
+      <div class="status-chips">
+        <span class="status-chip green">🟢 All Systems</span>
+        <span class="status-chip blue">🔵 7 Nodes Online</span>
+        <span class="status-chip teal">✅ Optimal Dispatch</span>
+      </div>
+    </div>
+
+    <div class="topbar-right">
+      <div id="freq-badge" class="telemetry-badge">
+        <span class="pulse-dot"></span>
+        <span class="value">50.00 Hz</span>
+      </div>
+      <div id="co2-counter" class="telemetry-badge">CO₂ Saved: 4.200 t</div>
+      <div id="clock" class="telemetry-badge clock">00:00:00</div>
+      <div class="telemetry-badge forecast">⛅ 72% Solar Forecast</div>
+    </div>
+  </div>
+
+  <div class="main-layout">
+
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="section-header">
+          <svg class="section-icon" width="20" height="20" viewBox="0 0 20 20">
+            <rect x="2" y="2" width="6" height="6" fill="var(--accent-teal)" opacity="0.6"/>
+            <rect x="12" y="2" width="6" height="6" fill="var(--accent-teal)" opacity="0.8"/>
+            <rect x="2" y="12" width="6" height="6" fill="var(--accent-teal)" opacity="1"/>
+            <rect x="12" y="12" width="6" height="6" fill="var(--accent-teal)" opacity="0.4"/>
+          </svg>
+          <span>ANALYSIS ENGINE</span>
+        </div>
+        <div id="active-method-label" class="method-active-label">Active: NODAL</div>
+
+        <div class="analysis-toggles">
+          <div class="analysis-toggle active" data-method="NODAL">
+            <div class="toggle-switch"></div>
+            <div class="toggle-content">
+              <div class="toggle-title">NODAL ANALYSIS</div>
+              <div class="toggle-desc">Solves bus voltages via KCL</div>
+            </div>
+          </div>
+
+          <div class="analysis-toggle" data-method="MESH">
+            <div class="toggle-switch"></div>
+            <div class="toggle-content">
+              <div class="toggle-title">MESH ANALYSIS</div>
+              <div class="toggle-desc">Loop currents via KVL</div>
+            </div>
+          </div>
+
+          <div class="analysis-toggle" data-method="THEVENIN">
+            <div class="toggle-switch"></div>
+            <div class="toggle-content">
+              <div class="toggle-title">THEVENIN'S THEOREM</div>
+              <div class="toggle-desc">Equivalent source simplification</div>
+            </div>
+          </div>
+
+          <div class="analysis-toggle" data-method="NORTON">
+            <div class="toggle-switch"></div>
+            <div class="toggle-content">
+              <div class="toggle-title">NORTON'S THEOREM</div>
+              <div class="toggle-desc">Current source equivalent circuit</div>
+            </div>
+          </div>
+
+          <div class="analysis-toggle" data-method="SUPERPOSITION">
+            <div class="toggle-switch"></div>
+            <div class="toggle-content">
+              <div class="toggle-title">SUPERPOSITION</div>
+              <div class="toggle-desc">Multi-source linear decomposition</div>
+            </div>
+          </div>
+
+          <div class="analysis-toggle" data-method="MAX_POWER">
+            <div class="toggle-switch"></div>
+            <div class="toggle-content">
+              <div class="toggle-title">MAX POWER TRANSFER</div>
+              <div class="toggle-desc">Load matching for peak efficiency</div>
+            </div>
+          </div>
+
+          <div class="analysis-toggle" data-method="MILLMAN">
+            <div class="toggle-switch"></div>
+            <div class="toggle-content">
+              <div class="toggle-title">MILLMAN'S THEOREM</div>
+              <div class="toggle-desc">Parallel voltage source averaging</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="method-output-panel" class="method-output glass">
+          V₁=11.2V  V₂=9.8V  V₃=10.4V  V₄=10.1V
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="section-header collapsible">
+          <span>LIVE PARAMETERS</span>
+          <span class="collapse-icon">▼</span>
+        </div>
+        <div id="params-panel" class="params-panel">
+
+          <div class="param-slider-group">
+            <div class="param-label-row">
+              <span class="param-icon">☀️</span>
+              <span class="param-name">Solar Intensity</span>
+              <span id="solar-value" class="param-value">100%</span>
+            </div>
+            <input type="range" id="slider-solar" class="param-slider solar"
+                   min="0" max="100" value="100" step="1">
+          </div>
+
+          <div class="param-slider-group">
+            <div class="param-label-row">
+              <span class="param-icon">🔋</span>
+              <span class="param-name">Battery SOC</span>
+              <span id="soc-value-slider" class="param-value">82%</span>
+            </div>
+            <input type="range" id="slider-soc" class="param-slider battery"
+                   min="10" max="100" value="82" step="1">
+          </div>
+
+          <div class="param-slider-group">
+            <div class="param-label-row">
+              <span class="param-icon">💰</span>
+              <span class="param-name">Grid Price</span>
+              <span id="price-value" class="param-value">$0.08</span>
+            </div>
+            <input type="range" id="slider-price" class="param-slider price"
+                   min="5" max="40" value="8" step="1">
+          </div>
+
+          <div class="param-slider-group">
+            <div class="param-label-row">
+              <span class="param-icon">⚡</span>
+              <span class="param-name">Load Demand</span>
+              <span id="load-value" class="param-value">1624 kW</span>
+            </div>
+            <input type="range" id="slider-load" class="param-slider load"
+                   min="500" max="3500" value="1624" step="10">
+          </div>
+
+        </div>
+      </div>
+
+      <div class="status-pills">
+        <div class="status-pill green">🟢 Optimizer: RUNNING</div>
+        <div class="status-pill amber">🟡 Forecast: UPDATING</div>
+        <div class="status-pill blue">🔵 Data: LIVE</div>
+      </div>
+    </aside>
+
+    <main class="center-column">
+
+      <div id="island-alert" class="island-alert" style="display:none;">
+        <div class="alert-icon">⚡</div>
+        <div class="alert-content">
+          <div class="alert-title">GRID DISCONNECTED — ISLAND MODE ACTIVE</div>
+          <div class="alert-desc">Microgrid operating autonomously on renewable + battery sources</div>
+        </div>
+        <div class="alert-pulse"></div>
+      </div>
+
+      <div class="scenario-control glass">
+        <div class="scenario-header">
+          <h2 class="scenario-title">SCENARIO CONTROL</h2>
+          <p class="scenario-subtitle">Select Grid State:</p>
+        </div>
+
+        <div class="scenario-cards">
+          <div class="scenario-card" id="sc-sunny" data-scenario="SUNNY_DAY">
+            <div class="scenario-icon">☀️</div>
+            <div class="scenario-title">Sunny Day</div>
+            <div class="scenario-desc">Full Renewable</div>
+            <div class="scenario-sources">
+              <span class="source-dot solar"></span>
+              <span class="source-dot wind"></span>
+              <span class="source-dot battery off"></span>
+              <span class="source-dot grid off"></span>
+            </div>
+          </div>
+
+          <div class="scenario-card" id="sc-peak" data-scenario="PEAK_EVENING">
+            <div class="scenario-icon">🌆</div>
+            <div class="scenario-title">Peak Evening</div>
+            <div class="scenario-desc">Battery + Grid</div>
+            <div class="scenario-sources">
+              <span class="source-dot solar off"></span>
+              <span class="source-dot wind"></span>
+              <span class="source-dot battery"></span>
+              <span class="source-dot grid"></span>
+            </div>
+          </div>
+
+          <div class="scenario-card" id="sc-failure" data-scenario="GRID_FAILURE">
+            <div class="scenario-icon">🔴</div>
+            <div class="scenario-title">Grid Failure</div>
+            <div class="scenario-desc">Islanded Microgrid</div>
+            <div class="scenario-sources">
+              <span class="source-dot solar"></span>
+              <span class="source-dot wind"></span>
+              <span class="source-dot battery"></span>
+              <span class="source-dot grid off"></span>
+            </div>
+          </div>
+
+          <div class="scenario-card" id="sc-overcast" data-scenario="OVERCAST">
+            <div class="scenario-icon">🌧️</div>
+            <div class="scenario-title">Overcast</div>
+            <div class="scenario-desc">Grid Supplementing</div>
+            <div class="scenario-sources">
+              <span class="source-dot solar"></span>
+              <span class="source-dot wind"></span>
+              <span class="source-dot battery"></span>
+              <span class="source-dot grid"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sld-container glass">
+        <svg id="sld-canvas" viewBox="0 0 900 400" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <linearGradient id="grad-gold" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:var(--accent-gold);stop-opacity:1" />
+              <stop offset="100%" style="stop-color:var(--accent-amber);stop-opacity:1" />
+            </linearGradient>
+            <linearGradient id="grad-emerald" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:var(--accent-emerald);stop-opacity:1" />
+              <stop offset="100%" style="stop-color:var(--accent-teal);stop-opacity:1" />
+            </linearGradient>
+          </defs>
+
+          <g class="sld-node" id="node-solar">
+            <rect x="50" y="40" width="120" height="70" rx="8" class="node-bg"/>
+            <text x="110" y="65" class="node-icon">☀️</text>
+            <text x="110" y="85" class="node-label">SOLAR FARM</text>
+            <text x="110" y="100" class="node-kw" id="kw-solar">1200 kW</text>
+            <circle cx="160" cy="50" r="4" class="status-dot green"/>
+          </g>
+
+          <g class="sld-node" id="node-wind">
+            <rect x="50" y="140" width="120" height="70" rx="8" class="node-bg"/>
+            <text x="110" y="165" class="node-icon">💨</text>
+            <text x="110" y="185" class="node-label">WIND TURBINE</text>
+            <text x="110" y="200" class="node-kw" id="kw-wind">320 kW</text>
+            <circle cx="160" cy="150" r="4" class="status-dot green"/>
+          </g>
+
+          <g class="sld-node" id="node-battery">
+            <rect x="50" y="240" width="120" height="70" rx="8" class="node-bg"/>
+            <text x="110" y="265" class="node-icon">🔋</text>
+            <text x="110" y="285" class="node-label">BATTERY ESS</text>
+            <text x="110" y="300" class="node-kw" id="kw-battery">365 kW</text>
+            <circle cx="160" cy="250" r="4" class="status-dot amber"/>
+          </g>
+
+          <g class="sld-node bus" id="node-bus">
+            <rect x="340" y="140" width="140" height="100" rx="10" class="node-bg bus"/>
+            <text x="410" y="175" class="node-label bus">MAIN BUS</text>
+            <text x="410" y="195" class="node-sublabel">400V 3Ø 50Hz</text>
+            <text x="410" y="225" class="node-kw large" id="kw-bus">1885 kW</text>
+          </g>
+
+          <g class="sld-node" id="node-grid">
+            <rect x="620" y="40" width="120" height="70" rx="8" class="node-bg"/>
+            <text x="680" y="65" class="node-icon">🔌</text>
+            <text x="680" y="85" class="node-label">UTILITY GRID</text>
+            <text x="680" y="100" class="node-kw" id="kw-grid">0 kW</text>
+            <circle cx="730" cy="50" r="4" class="status-dot red"/>
+          </g>
+
+          <g class="sld-node" id="node-load">
+            <rect x="620" y="140" width="120" height="70" rx="8" class="node-bg"/>
+            <text x="680" y="165" class="node-icon">🏭</text>
+            <text x="680" y="185" class="node-label">FACILITY LOAD</text>
+            <text x="680" y="200" class="node-kw" id="kw-load">1530 kW</text>
+            <circle cx="730" cy="150" r="4" class="status-dot green"/>
+          </g>
+
+          <g class="sld-node" id="node-ev">
+            <rect x="620" y="240" width="120" height="70" rx="8" class="node-bg"/>
+            <text x="680" y="265" class="node-icon">⚡</text>
+            <text x="680" y="285" class="node-label">EV CHARGERS</text>
+            <text x="680" y="300" class="node-kw" id="kw-ev">355 kW</text>
+            <circle cx="730" cy="250" r="4" class="status-dot teal"/>
+          </g>
+
+          <g class="flow-line" id="flow-solar">
+            <path d="M 170 75 L 340 150" class="flow-path gold" filter="url(#glow-filter)"/>
+            <circle r="6" class="flow-dot gold">
+              <animateMotion dur="1.5s" repeatCount="indefinite">
+                <mpath href="#path-solar"/>
+              </animateMotion>
+            </circle>
+            <path id="path-solar" d="M 170 75 L 340 150" style="display:none"/>
+            <text x="255" y="105" class="flow-label">1200 kW</text>
+          </g>
+
+          <g class="flow-line" id="flow-wind">
+            <path d="M 170 175 L 340 175" class="flow-path teal" filter="url(#glow-filter)"/>
+            <circle r="6" class="flow-dot teal">
+              <animateMotion dur="2s" repeatCount="indefinite">
+                <mpath href="#path-wind"/>
+              </animateMotion>
+            </circle>
+            <path id="path-wind" d="M 170 175 L 340 175" style="display:none"/>
+            <text x="255" y="165" class="flow-label">320 kW</text>
+          </g>
+
+          <g class="flow-line" id="flow-battery">
+            <path d="M 170 275 L 340 210" class="flow-path emerald" filter="url(#glow-filter)"/>
+            <circle r="6" class="flow-dot emerald">
+              <animateMotion dur="2.2s" repeatCount="indefinite">
+                <mpath href="#path-battery"/>
+              </animateMotion>
+            </circle>
+            <path id="path-battery" d="M 170 275 L 340 210" style="display:none"/>
+            <text x="255" y="250" class="flow-label">365 kW</text>
+          </g>
+
+          <g class="flow-line" id="flow-grid">
+            <path d="M 620 75 L 480 150" class="flow-path red" filter="url(#glow-filter)"/>
+            <circle r="5" class="flow-dot red">
+              <animateMotion dur="3s" repeatCount="indefinite">
+                <mpath href="#path-grid"/>
+              </animateMotion>
+            </circle>
+            <path id="path-grid" d="M 620 75 L 480 150" style="display:none"/>
+            <text x="550" y="105" class="flow-label">0 kW</text>
+          </g>
+
+          <g class="flow-line" id="flow-load">
+            <path d="M 480 175 L 620 175" class="flow-path blue" filter="url(#glow-filter)"/>
+            <circle r="7" class="flow-dot blue">
+              <animateMotion dur="1.2s" repeatCount="indefinite">
+                <mpath href="#path-load"/>
+              </animateMotion>
+            </circle>
+            <path id="path-load" d="M 480 175 L 620 175" style="display:none"/>
+            <text x="550" y="165" class="flow-label">1530 kW</text>
+          </g>
+
+          <g class="flow-line" id="flow-ev">
+            <path d="M 480 210 L 620 275" class="flow-path teal" filter="url(#glow-filter)"/>
+            <circle r="6" class="flow-dot teal">
+              <animateMotion dur="1.8s" repeatCount="indefinite">
+                <mpath href="#path-ev"/>
+              </animateMotion>
+            </circle>
+            <path id="path-ev" d="M 480 210 L 620 275" style="display:none"/>
+            <text x="550" y="250" class="flow-label">355 kW</text>
+          </g>
+        </svg>
+
+        <div class="diagram-controls">
+          <button id="btn-pause" class="diagram-btn">⏸ Pause</button>
+          <button id="btn-reset" class="diagram-btn">↻ Reset</button>
+          <button id="btn-impedances" class="diagram-btn">Z Show Impedances</button>
+        </div>
+      </div>
+
+    </main>
+
+    <aside class="right-panel">
+
+      <div class="soc-gauge-container glass">
+        <svg id="soc-gauge" viewBox="0 0 200 200">
+          <circle cx="100" cy="100" r="70" class="gauge-track"/>
+          <circle cx="100" cy="100" r="70" class="gauge-fill" id="gauge-arc"
+                  transform="rotate(-135 100 100)"/>
+          <text x="100" y="90" id="soc-value" class="gauge-value">82</text>
+          <text x="100" y="105" class="gauge-unit">%</text>
+          <text x="100" y="125" class="gauge-label">STATE OF CHARGE</text>
+          <text x="100" y="145" id="soc-label" class="gauge-status">✅ Optimal Dispatch</text>
+        </svg>
+      </div>
+
+      <div class="kpi-stack">
+        <div class="kpi-card glass">
+          <div class="kpi-icon">⚡</div>
+          <div class="kpi-content">
+            <div class="kpi-label">Grid Frequency</div>
+            <div class="kpi-value" id="kpi-freq">50.00 Hz</div>
+          </div>
+        </div>
+
+        <div class="kpi-card glass">
+          <div class="kpi-icon">📐</div>
+          <div class="kpi-content">
+            <div class="kpi-label">Power Factor</div>
+            <div class="kpi-value" id="kpi-pf">cos φ = 0.94</div>
+            <div class="kpi-bar">
+              <div class="kpi-bar-fill" style="width: 94%"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="kpi-card glass">
+          <div class="kpi-icon">🌿</div>
+          <div class="kpi-content">
+            <div class="kpi-label">Renewable %</div>
+            <div class="kpi-value" id="kpi-renew">100%</div>
+            <div class="kpi-bar">
+              <div class="kpi-bar-fill green" id="kpi-renew-bar" style="width: 100%"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="kpi-card glass">
+          <div class="kpi-icon">🔬</div>
+          <div class="kpi-content">
+            <div class="kpi-label">Analysis Method</div>
+            <div class="kpi-value small" id="kpi-analysis">NODAL</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dispatch-mode glass">
+        <div class="dispatch-header">DISPATCH MODE</div>
+        <div class="dispatch-chips">
+          <div class="dispatch-chip active" data-mode="COST_MIN">💰 Cost Min</div>
+          <div class="dispatch-chip" data-mode="CARBON_MIN">🌿 Carbon Min</div>
+          <div class="dispatch-chip" data-mode="PEAK_SHAVE">⚡ Peak Shave</div>
+        </div>
+      </div>
+
+      <div id="manual-source-panel" class="manual-sources glass" style="display:none;">
+        <div class="manual-header">SOURCE CONTROL</div>
+        <div class="source-toggles">
+          <div class="source-toggle on" data-source="solar">
+            <span class="source-icon">☀️</span>
+            <span class="source-name">Solar</span>
+            <div class="toggle-switch-ui"></div>
+          </div>
+          <div class="source-toggle on" data-source="wind">
+            <span class="source-icon">💨</span>
+            <span class="source-name">Wind</span>
+            <div class="toggle-switch-ui"></div>
+          </div>
+          <div class="source-toggle on" data-source="battery">
+            <span class="source-icon">🔋</span>
+            <span class="source-name">Battery</span>
+            <div class="toggle-switch-ui"></div>
+          </div>
+          <div class="source-toggle on" data-source="grid">
+            <span class="source-icon">🔌</span>
+            <span class="source-name">Grid</span>
+            <div class="toggle-switch-ui"></div>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="bottom-left glass">
+      <div class="chart-header">
+        <h3 class="chart-title">COST SAVINGS</h3>
+        <p class="chart-subtitle">vs. Unoptimized Baseline</p>
+      </div>
+      <div class="chart-wrapper">
+        <canvas id="chart-savings"></canvas>
+      </div>
+    </div>
+
+    <div class="bottom-right glass">
+      <div class="log-header">
+        <span class="log-title">DISPATCH LOG</span>
+        <span class="log-live">● LIVE</span>
+      </div>
+      <div id="optimizer-log" class="optimizer-log"></div>
+    </div>
+  </div>
+
+  <div class="tabs-section">
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="tab-forecast">📊 Load & Generation Forecast</button>
+      <button class="tab-btn" data-tab="tab-battery">🔋 Battery Intelligence</button>
+      <button class="tab-btn" data-tab="tab-dispatch">💰 Economic Dispatch Engine</button>
+      <button class="tab-btn" data-tab="tab-health">🛡️ Grid Health & Signal Analysis</button>
+      <button class="tab-btn" data-tab="tab-lab">📡 Circuit Analysis Lab</button>
+    </div>
+
+    <div class="tab-content">
+
+      <div id="tab-forecast" class="tab-panel active">
+        <div class="tab-panel-inner glass">
+          <h3 class="panel-title">24-Hour Generation & Load Forecast</h3>
+          <div class="chart-wrapper-large">
+            <canvas id="chart-forecast"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-battery" class="tab-panel">
+        <div class="tab-panel-inner glass">
+          <div class="battery-grid">
+            <div class="battery-col">
+              <h3 class="panel-title">Charge/Discharge Schedule</h3>
+              <canvas id="chart-schedule"></canvas>
+            </div>
+            <div class="battery-col">
+              <h3 class="panel-title">Arbitrage Savings</h3>
+              <div id="arbitrage-counter" class="arbitrage-value">💰 $142.30</div>
+              <h3 class="panel-title">7-Day SOC History</h3>
+              <canvas id="chart-soc-history"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-dispatch" class="tab-panel">
+        <div class="tab-panel-inner glass">
+          <div class="dispatch-grid">
+            <div class="dispatch-col-main">
+              <h3 class="panel-title">Merit Order Dispatch Table</h3>
+              <table id="merit-table" class="merit-table">
+                <thead>
+                  <tr>
+                    <th>Rank</th>
+                    <th>Source</th>
+                    <th>Cost ($/kWh)</th>
+                    <th>Available (kW)</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="merit-tbody">
+                </tbody>
+              </table>
+              <div id="formula-block" class="formula-block">
+                <div class="formula-title">Optimization Objective:</div>
+                <div class="formula">Minimize: Σ(Cᵢ × Pᵢ)  s.t. ΣPᵢ = P<sub>load</sub></div>
+              </div>
+            </div>
+            <div class="dispatch-col-side">
+              <div class="savings-card">
+                <div class="savings-label">Today</div>
+                <div id="savings-today" class="savings-value">$47.20</div>
+              </div>
+              <div class="savings-card">
+                <div class="savings-label">This Month</div>
+                <div id="savings-month" class="savings-value">$1,342</div>
+              </div>
+              <div class="savings-card green">
+                <div class="savings-label">CO₂ Avoided</div>
+                <div id="savings-carbon" class="savings-value">2.4 t</div>
+              </div>
+              <div class="curtailment-card">
+                <div class="curtailment-label">Curtailment Risk</div>
+                <div class="curtailment-bar">
+                  <div id="curtailment-fill" class="curtailment-fill" style="width: 0%"></div>
+                </div>
+                <div id="curtailment-value" class="curtailment-value">0 kW</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-health" class="tab-panel">
+        <div class="tab-panel-inner glass">
+          <div class="health-grid">
+            <div class="health-item">
+              <h3 class="panel-title">Frequency Monitor</h3>
+              <canvas id="chart-freq"></canvas>
+            </div>
+            <div class="health-item">
+              <h3 class="panel-title">Voltage Profile (p.u.)</h3>
+              <canvas id="chart-voltage"></canvas>
+            </div>
+            <div class="health-item">
+              <h3 class="panel-title">Waveform Analysis</h3>
+              <canvas id="waveform-canvas" width="400" height="200"></canvas>
+              <div class="waveform-controls">
+                <button id="btn-disturb" class="waveform-btn">Add Harmonics</button>
+                <button id="btn-compensate" class="waveform-btn">Compensate</button>
+                <span id="thd-label" class="thd-label">THD: 1.2%</span>
+              </div>
+            </div>
+            <div class="health-item">
+              <h3 class="panel-title">Power Quality</h3>
+              <div id="pq-panel" class="pq-panel">
+                <div class="pq-gauge">
+                  <div class="pq-label">Real Power</div>
+                  <div class="pq-value">1.68 MW</div>
+                </div>
+                <div class="pq-gauge">
+                  <div class="pq-label">Reactive Power</div>
+                  <div class="pq-value">0.42 MVAr</div>
+                </div>
+                <div class="pq-gauge">
+                  <div class="pq-label">Power Factor</div>
+                  <div class="pq-value">0.94 lag</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-lab" class="tab-panel">
+        <div class="tab-panel-inner glass">
+          <div id="analysis-lab" class="analysis-lab">
+            <h3 class="panel-title">Circuit Analysis: NODAL</h3>
+            <div class="analysis-content">
+              <p class="analysis-intro">Nodal analysis applies Kirchhoff's Current Law (KCL) at each node to solve for bus voltages.</p>
+              <div class="analysis-equations">
+                <div class="equation-line">Y<sub>bus</sub> × V = I</div>
+                <div class="equation-line">V₁ = 11.2V  |  V₂ = 9.8V  |  V₃ = 10.4V  |  V₄ = 10.1V</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <button id="btn-help" class="help-button">?</button>
+
+  <div id="help-modal" class="help-modal">
+    <div class="help-modal-content glass">
+      <button id="modal-close" class="modal-close">✕</button>
+      <h2 class="modal-title">GRIDMIND EMS — System Guide</h2>
+      <div class="help-columns">
+        <div class="help-col">
+          <h3>Smart Grid Optimization</h3>
+          <p>This system performs four core functions:</p>
+          <ol>
+            <li><strong>Economic Dispatch:</strong> Minimize operating costs via merit order</li>
+            <li><strong>Load Forecasting:</strong> Predict demand patterns for optimal scheduling</li>
+            <li><strong>Battery Intelligence:</strong> Time-shift energy for arbitrage savings</li>
+            <li><strong>Renewable Integration:</strong> Maximize clean energy penetration</li>
+          </ol>
+          <h3>Dispatch Decision Matrix</h3>
+          <table class="help-table">
+            <tr><th>Mode</th><th>Priority</th><th>Use Case</th></tr>
+            <tr><td>Cost Min</td><td>Lowest $/kWh first</td><td>Standard operation</td></tr>
+            <tr><td>Carbon Min</td><td>Renewable first</td><td>Sustainability goals</td></tr>
+            <tr><td>Peak Shave</td><td>Demand cap</td><td>Avoid demand charges</td></tr>
+          </table>
+        </div>
+        <div class="help-col">
+          <h3>7 Circuit Analysis Methods</h3>
+          <dl class="help-list">
+            <dt>NODAL</dt><dd>Solves for node voltages using KCL at each bus</dd>
+            <dt>MESH</dt><dd>Solves for loop currents using KVL around meshes</dd>
+            <dt>THEVENIN</dt><dd>Reduces circuit to equivalent voltage source + impedance</dd>
+            <dt>NORTON</dt><dd>Reduces circuit to equivalent current source + impedance</dd>
+            <dt>SUPERPOSITION</dt><dd>Analyzes each source independently, then sums results</dd>
+            <dt>MAX POWER</dt><dd>Finds load impedance for maximum power transfer</dd>
+            <dt>MILLMAN</dt><dd>Combines parallel voltage sources into single equivalent</dd>
+          </dl>
+        </div>
+      </div>
+      <div class="help-footer">
+        <strong>Active Analysis Method:</strong> <span id="help-active-method">NODAL</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/state.js"></script>
+  <script src="/js/dataEngine.js"></script>
+  <script src="/js/optimizer.js"></script>
+  <script src="/js/sld.js"></script>
+  <script src="/js/charts.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/interactions.js"></script>
+  <script src="/js/main.js"></script>
+
+</body>
+</html>
