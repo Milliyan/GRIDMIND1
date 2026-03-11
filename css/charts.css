@@ -1,0 +1,266 @@
+/* ============================================================
+   GRIDMIND EMS — charts.css
+   Chart.js container sizing and chart wrapper styles
+   ============================================================ */
+
+.chart-wrapper {
+  position: relative;
+  height: 160px;
+  width: 100%;
+}
+
+.chart-wrapper canvas {
+  max-height: 160px;
+}
+
+.chart-wrapper-large {
+  position: relative;
+  height: 400px;
+  width: 100%;
+}
+
+.chart-wrapper-large canvas {
+  max-height: 400px;
+}
+
+.battery-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 24px;
+}
+
+.battery-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.battery-col canvas {
+  max-height: 300px;
+}
+
+.arbitrage-value {
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--accent-green);
+  text-align: center;
+  padding: 32px;
+  font-family: var(--font-mono);
+}
+
+.dispatch-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+
+.merit-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+.merit-table th,
+.merit-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.merit-table th {
+  background: rgba(0,229,204,0.1);
+  color: var(--accent-teal);
+  font-size: 11px;
+  font-weight: 600;
+  font-family: var(--font-display);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.merit-table td {
+  font-size: 12px;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+}
+
+.merit-table tr {
+  transition: background var(--transition-fast);
+}
+
+.merit-table tbody tr:hover {
+  background: rgba(0,229,204,0.05);
+}
+
+.formula-block {
+  margin-top: 24px;
+  padding: 16px;
+  background: rgba(0,229,204,0.05);
+  border-left: 3px solid var(--accent-teal);
+  border-radius: 8px;
+}
+
+.formula-title {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.formula {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--accent-teal);
+}
+
+.savings-card {
+  padding: 20px;
+  background: rgba(15,32,64,0.6);
+  border: 1px solid rgba(0,229,204,0.2);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.savings-card.green {
+  border-color: rgba(57,255,106,0.3);
+  background: rgba(57,255,106,0.05);
+}
+
+.savings-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.savings-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--accent-teal);
+  font-family: var(--font-mono);
+}
+
+.savings-card.green .savings-value {
+  color: var(--accent-green);
+}
+
+.curtailment-card {
+  padding: 20px;
+  background: rgba(15,32,64,0.6);
+  border: 1px solid rgba(255,153,0,0.2);
+  border-radius: 12px;
+}
+
+.curtailment-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.curtailment-bar {
+  height: 8px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.curtailment-fill {
+  height: 100%;
+  background: var(--accent-amber);
+  border-radius: 4px;
+  transition: width var(--transition-med);
+}
+
+.curtailment-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--accent-amber);
+  font-family: var(--font-mono);
+  text-align: center;
+}
+
+.health-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.health-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.health-item canvas {
+  max-height: 250px;
+}
+
+#waveform-canvas {
+  width: 100%;
+  height: 200px;
+  background: rgba(5,10,20,0.8);
+  border-radius: 8px;
+}
+
+.waveform-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.waveform-btn {
+  padding: 8px 16px;
+  background: rgba(15,32,64,0.6);
+  color: var(--text-primary);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  transition: all var(--transition-med);
+}
+
+.waveform-btn:hover {
+  background: rgba(15,32,64,0.9);
+  border-color: var(--accent-teal);
+}
+
+.thd-label {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--accent-teal);
+}
+
+.pq-panel {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.pq-gauge {
+  padding: 20px;
+  background: rgba(15,32,64,0.6);
+  border: 1px solid rgba(0,229,204,0.2);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.pq-label {
+  font-size: 10px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.pq-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--accent-teal);
+  font-family: var(--font-mono);
+}

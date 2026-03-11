@@ -1,0 +1,124 @@
+/* ============================================================
+   GRIDMIND EMS — variables.css
+   CSS custom properties, global resets, and glass morphism
+   ============================================================ */
+
+:root {
+  --bg-primary:       #0b1120;
+  --bg-secondary:     #0D1A2E;
+  --bg-card:          #0F2040;
+  --accent-gold:      #FFB830;
+  --accent-emerald:   #00E87A;
+  --accent-teal:      #00E5CC;
+  --accent-red:       #FF4B4B;
+  --accent-amber:     #FF9900;
+  --accent-green:     #39FF6A;
+  --accent-blue-dim:  #7B9EC4;
+  --text-primary:     #E8F4FD;
+  --text-dim:         #4A6A8A;
+  --glass-border:     rgba(0,229,204,0.15);
+  --glass-border-act: rgba(0,229,204,0.40);
+  --glow-gold:        rgba(255,184,48,0.40);
+  --glow-emerald:     rgba(0,232,122,0.40);
+  --glow-red:         rgba(255,75,75,0.30);
+  --glow-teal:        rgba(0,229,204,0.35);
+  --glow-amber:       rgba(255,153,0,0.40);
+  --font-display:     'Rajdhani', sans-serif;
+  --font-mono:        'Share Tech Mono', monospace;
+  --font-body:        'DM Sans', sans-serif;
+  --radius-card:      16px;
+  --radius-pill:      20px;
+  --transition-fast:  150ms ease-out;
+  --transition-med:   300ms ease-out;
+  --transition-slow:  600ms ease-out;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.5;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(circle, rgba(0,229,204,0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.3;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0,229,204,0.02) 0px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.15;
+  animation: scanline 8s linear infinite;
+}
+
+.glass {
+  background: rgba(13,26,46,0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-card);
+  box-shadow: 0 4px 32px rgba(0,0,0,0.4),
+              inset 0 1px 0 rgba(255,255,255,0.05);
+  transition: border-color var(--transition-med),
+              box-shadow var(--transition-med);
+}
+
+.glass:hover {
+  border-color: var(--glass-border-act);
+  box-shadow: 0 4px 32px rgba(0,0,0,0.4),
+              0 0 20px var(--glow-teal),
+              inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+input, select, textarea {
+  font-family: inherit;
+}

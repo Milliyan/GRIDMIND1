@@ -1,0 +1,122 @@
+/* ============================================================
+   GRIDMIND EMS — tabs.css
+   Analysis tab bar, tab content panels, and tab transitions
+   ============================================================ */
+
+.tab-bar {
+  display: flex;
+  gap: 8px;
+  background: rgba(13,26,46,0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
+  padding: 12px 16px 0 16px;
+}
+
+.tab-btn {
+  padding: 12px 20px;
+  background: transparent;
+  color: var(--text-dim);
+  border: none;
+  border-radius: 8px 8px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--font-display);
+  cursor: pointer;
+  transition: all var(--transition-med);
+  border-bottom: 2px solid transparent;
+}
+
+.tab-btn:hover {
+  color: var(--text-primary);
+  background: rgba(0,229,204,0.05);
+}
+
+.tab-btn.active {
+  color: var(--accent-teal);
+  background: rgba(0,229,204,0.12);
+  border-bottom-color: var(--accent-teal);
+}
+
+.tab-content {
+  background: rgba(13,26,46,0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-top: none;
+  border-radius: 0 0 var(--radius-card) var(--radius-card);
+  min-height: 500px;
+}
+
+.tab-panel {
+  display: none;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.tab-panel.active {
+  display: block;
+}
+
+.tab-panel-inner {
+  padding: 24px;
+}
+
+.panel-title {
+  font-size: 16px;
+  color: var(--accent-gold);
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.analysis-lab {
+  padding: 20px;
+}
+
+.analysis-content {
+  margin-top: 16px;
+}
+
+.analysis-intro {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.analysis-equations {
+  padding: 20px;
+  background: rgba(0,229,204,0.05);
+  border-left: 3px solid var(--accent-teal);
+  border-radius: 8px;
+}
+
+.equation-line {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--accent-teal);
+  margin-bottom: 12px;
+}
+
+.equation-line:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 1024px) {
+  .tab-bar {
+    flex-wrap: wrap;
+  }
+
+  .tab-btn {
+    font-size: 11px;
+    padding: 10px 14px;
+  }
+
+  .battery-grid,
+  .dispatch-grid,
+  .health-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pq-panel {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,227 @@
+/* ============================================================
+   GRIDMIND EMS — layout.css
+   Bento grid layout, topbar, sidebar, and responsive structure
+   ============================================================ */
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
+}
+
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  z-index: 1000;
+  border-bottom: 1px solid rgba(0,229,204,0.12);
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  width: 32px;
+  height: 32px;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 1px;
+}
+
+.brand-sub {
+  font-size: 10px;
+  color: var(--accent-teal);
+  font-family: var(--font-mono);
+  letter-spacing: 0.5px;
+}
+
+.topbar-center-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-left: 40px;
+}
+
+.topbar-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.system-header {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--accent-teal);
+  font-family: var(--font-display);
+  letter-spacing: 2px;
+}
+
+.status-chips {
+  display: flex;
+  gap: 8px;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.telemetry-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-primary);
+  padding: 6px 12px;
+  background: rgba(0,229,204,0.08);
+  border-radius: 6px;
+  border: 1px solid rgba(0,229,204,0.15);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.telemetry-badge.clock {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-teal);
+}
+
+.telemetry-badge.forecast {
+  background: rgba(255,184,48,0.08);
+  border-color: rgba(255,184,48,0.2);
+}
+
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--accent-green);
+  border-radius: 50%;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+.main-layout {
+  margin-top: 60px;
+  display: grid;
+  grid-template-columns: 220px 1fr 280px;
+  gap: 16px;
+  padding: 16px;
+  min-height: calc(100vh - 60px - 180px - 350px);
+  position: relative;
+  z-index: 1;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sidebar-section {
+  background: rgba(13,26,46,0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-card);
+  padding: 16px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent-teal);
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.section-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.center-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.right-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.bottom-bar {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding: 0 16px 16px 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.bottom-left, .bottom-right {
+  padding: 16px;
+}
+
+.tabs-section {
+  position: relative;
+  z-index: 1;
+  margin: 0 16px 16px 16px;
+}
+
+@media (max-width: 1600px) {
+  .main-layout {
+    grid-template-columns: 200px 1fr 260px;
+  }
+}
+
+@media (max-width: 1400px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar, .right-panel {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .topbar {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 12px;
+  }
+
+  .topbar-center-left,
+  .topbar-center {
+    display: none;
+  }
+
+  .bottom-bar {
+    grid-template-columns: 1fr;
+  }
+}

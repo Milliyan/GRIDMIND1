@@ -1,0 +1,175 @@
+/* ============================================================
+   GRIDMIND EMS — sld.css
+   Single-Line Diagram SVG styles and animations
+   ============================================================ */
+
+.sld-container {
+  padding: 20px;
+}
+
+#sld-canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.sld-node {
+  transition: all var(--transition-med);
+}
+
+.node-bg {
+  fill: rgba(15,32,64,0.7);
+  stroke: rgba(0,229,204,0.3);
+  stroke-width: 1;
+  transition: all var(--transition-med);
+}
+
+.node-bg:hover {
+  fill: rgba(15,32,64,0.9);
+  stroke: rgba(0,229,204,0.5);
+}
+
+.node-bg.bus {
+  fill: rgba(0,229,204,0.08);
+  stroke: var(--accent-teal);
+  stroke-width: 2;
+}
+
+.node-icon {
+  font-size: 20px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.node-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  fill: var(--text-dim);
+  text-anchor: middle;
+  letter-spacing: 0.5px;
+}
+
+.node-label.bus {
+  font-size: 11px;
+  fill: var(--accent-teal);
+  font-weight: 600;
+}
+
+.node-sublabel {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  fill: var(--text-dim);
+  text-anchor: middle;
+}
+
+.node-kw {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  fill: var(--text-primary);
+  text-anchor: middle;
+  font-weight: 600;
+}
+
+.node-kw.large {
+  font-size: 14px;
+  fill: var(--accent-teal);
+}
+
+.status-dot {
+  transition: all var(--transition-med);
+}
+
+.status-dot.green {
+  fill: var(--accent-green);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+.status-dot.amber {
+  fill: var(--accent-amber);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+.status-dot.red {
+  fill: var(--accent-red);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+.status-dot.teal {
+  fill: var(--accent-teal);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+.flow-line {
+  transition: opacity var(--transition-med);
+}
+
+.flow-path {
+  fill: none;
+  stroke-width: 2;
+  transition: all var(--transition-med);
+}
+
+.flow-path.gold {
+  stroke: var(--accent-gold);
+}
+
+.flow-path.emerald {
+  stroke: var(--accent-emerald);
+}
+
+.flow-path.teal {
+  stroke: var(--accent-teal);
+}
+
+.flow-path.red {
+  stroke: var(--accent-red);
+  stroke-width: 1.5;
+}
+
+.flow-path.blue {
+  stroke: #B8D4F0;
+  stroke-width: 3;
+}
+
+.flow-dot {
+  transition: all var(--transition-med);
+}
+
+.flow-dot.gold {
+  fill: var(--accent-gold);
+}
+
+.flow-dot.emerald {
+  fill: var(--accent-emerald);
+}
+
+.flow-dot.teal {
+  fill: var(--accent-teal);
+}
+
+.flow-dot.red {
+  fill: var(--accent-red);
+}
+
+.flow-dot.blue {
+  fill: #B8D4F0);
+}
+
+.flow-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  fill: var(--text-dim);
+  text-anchor: middle;
+}
+
+#node-grid.dimmed {
+  opacity: 0.3;
+}
+
+#flow-grid.hidden {
+  opacity: 0;
+}
+
+.bus-flash {
+  animation: bus-flash 0.8s ease-out;
+}
